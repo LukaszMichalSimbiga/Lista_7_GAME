@@ -93,7 +93,7 @@ pygame.display.set_caption("Tic Tac Toe 2")
 
 
 # Załaduj plik z tłem                                DODAĆ TŁO !!!
-background_image = loadImage("bkg.jpg")
+background_image = loadImage("Img_back.jpg")
 screen.blit(background_image,(0,0))
 
 
