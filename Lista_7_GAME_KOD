@@ -12,15 +12,7 @@ main_menu.title(  'Gra w tkinter'  )
 
 main_menu.geometry( str(screen_width) +'x'+ str(screen_height) +'+'+ str(round(screen_width/2)) +'+'+ str(round(screen_height/2 )) )
 
-Playfield=[]
-for i in range(3):
-    Playfield_27=[]
-    for j in range(3):
-        Playfield_9=[]
-        for k in range(3):
-            Playfield_9.append([2,2,2])
-        Playfield_27.append(Playfield_9)
-    Playfield.append(Playfield_27)
+
 
 #PF2=Playfield
 #PF2 = [PF2.copy(),PF2.copy(),PF2.copy()]
@@ -41,7 +33,15 @@ my_exit.place(  x = round( screen_width * 0.45 ) , y = round( screen_height * 0.
 def go():
     """Start new game"""
     root = ti.Tk()
-
+    Playfield=[]
+    for i in range(3):
+        Playfield_27=[]
+        for j in range(3):
+            Playfield_9=[]
+            for k in range(3):
+                Playfield_9.append([2,2,2])
+            Playfield_27.append(Playfield_9)
+        Playfield.append(Playfield_27)
     #if war.get()
 
     SCREEN_WIDTH = round(root.winfo_screenwidth()*3/5)
