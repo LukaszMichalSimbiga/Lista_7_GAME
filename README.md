@@ -18,6 +18,7 @@ In this project I use:
 * Your choose determines the block in which the opponent have to make the next move.
 * If this block is change in symbol. Opponent can make next move everywhere.
 * If block is full but no one win then block cleans up.
+* If war mod is off game is end when there is no more moves or if somebody
 ## How to run this game
 1. Clone the template project, replacing my-project with the name of the project you are creating: 
 `https://github.com/262267/my_python_game.git my-project`
