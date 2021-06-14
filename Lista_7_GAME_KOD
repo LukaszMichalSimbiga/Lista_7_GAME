@@ -12,15 +12,15 @@ main_menu.title(  'Gra w tkinter'  )
 
 main_menu.geometry( str(screen_width) +'x'+ str(screen_height) +'+'+ str(round(screen_width/2)) +'+'+ str(round(screen_height/2 )) )
 
+war = ti.IntVar()
+war_mod = ti.Checkbutton(main_menu, text = " WAR mod ", variable = war , \
+    onvalue = True , offvalue = False, height=5, width = 20)
+war_mod.place( x = screen_width * 0.43 , y = screen_height * 0.2 )
 
 
-#PF2=Playfield
-#PF2 = [PF2.copy(),PF2.copy(),PF2.copy()]
-#Playfield = [PF2.copy(),PF2.copy(),PF2.copy()]
     
 boool = random.choice([[0],[1]])
-#out=[0]
-#I_m_here=out
+blue_symbol=boool[0:2]
 
 moves=[]
 
@@ -90,6 +90,7 @@ def go():
     width=TTT_width,
     bg="white")
     canvas.place( x= SCREEN_WIDTH*0.05 , y = 0 )
+    canvas.create_rectangle( TTT_width , TTT_height , 0 , 0 , fill='orange')
     
     life_bar_blue= ti.Canvas(
     root,
@@ -98,8 +99,12 @@ def go():
     bg="blue")
     life_bar_blue.place( x= 0 , y = 0 )
 
-    my_exit_in = ti.Button( root , text = """     To finish all click here     """ , background = "red" , command = exit )
-    my_exit_in.place(  x = round( SCREEN_WIDTH * 0.45 ) , y = round( SCREEN_HEIGHT * 0.95 )  )
+    def close():
+        root.destroy()
+
+    my_exit_in = ti.Button( root , text = """     Click here to exit     """ , background = "red" , command = close )
+    my_exit_in.place(  x = round( SCREEN_WIDTH * 0.6 ) , y = round( SCREEN_HEIGHT * 0.95 )  )
+    
     
     
     def draw_grid():
@@ -147,41 +152,40 @@ def go():
                         canvas.create_oval( round( left_up[1] + in_width/2 - R ) , round( left_up[0] + in_height/2 - R ) , round( left_up[1] + in_width/2 + R ) , round( left_up[0] + in_height/2 + R ) )
 
     draw_symbols()
-    def color_move_place(number):
-        canvas.delete('all')  
-        #canvas.create_rectangle( 0 , 0 , TTT_width , TTT_height , fill='orange')   
-        value=moves[-1][0]
-        i= 2 - ( (value-1)//3 )
-        j= (value-1)%3
-        canvas.create_rectangle( TTT_width*j*16/47 , TTT_height*i*16/47 , TTT_width*(j*16+15)/47 , TTT_height*(i*16+15)/47 , fill='orange')
+    
+    def is_full(frame):
+        if type(frame)!=list:
+            return False
+        for i in frame:
+            for val in i:
+                if val==2:
+                    return False
+        else:return True
+
+    def restart(frame):
+        if type(frame)!=list:
+            return False
+        for i in range(3):
+            for val in range(3):
+                frame[i][val]=2
+                
+    blue_live=[10]
+    red_live=[10]
+
+
+    def clear():
+        for i in range(3):
+            for j in range(3): 
+                Playfield[i][j]=[[2,2,2],[2,2,2],[2,2,2]]
+        canvas.delete('all')
+        canvas.create_rectangle( TTT_width , TTT_height , 0 , 0 , fill='orange')
         draw_grid()
         draw_symbols()
 
+    my_clear = ti.Button( root , text = """     Click here to restart game     """ , background = "green" , command = clear )
+    my_clear.place(  x = round( SCREEN_WIDTH * 0.3 ) , y = round( SCREEN_HEIGHT * 0.95 )  )
 
-    def go_to(num):
-        if ( num in range(1,10) ) :
-            N_1 = (num-1) // 3
-            N_2 = (num-1) % 3
-            if type(Playfield[N_1][N_2])==list :
-                #I_m_here = [num]
-                moves.append([num])
-            else:
-                #I_m_here = out
-                pass
-
-
-    def go_to_and_change(num):
-        if ( num in range(1,10) ) :#and ( I_m_here != out ) :
-            #N_1 = (num-1) // 3
-            #N_2 = (num-1) % 3
-            #I_m_here[N_1][N_2]=boool
-            #moves[-1].append([num])
-            #boool = 1-boool
-            #Playfield=Playfield[0:3]
-            go_to(num)
-    
     def your_choose(number):
-        #print(I_m_here)
         try:
             value=int(number.char)
             if value in range(1,10):
@@ -192,16 +196,7 @@ def go():
                     canvas.create_rectangle( TTT_width*N_2*16/47 , TTT_height*(2-N_1)*16/47 , TTT_width*(N_2*16+15)/47 , TTT_height*((2-N_1)*16+15)/47 , fill='orange')
                     draw_grid()
                     draw_symbols()
-                    #I_m_here += number
                     moves.append([value])
-                    #go_to(number)
-                    #if type(I_m_here)==list:
-                    #    color_move_place(number)
-                    #else:
-                    #    canvas.delete('all')
-                    #    canvas.create_rectangle( 0 , 0 , TTT_width , TTT_height , fill='orange')
-                    #    draw_grid()
-                    #    draw_symbols()
                 elif len( moves[-1] )==1:
                     number_block=moves[-1][0]
                     N_out_1=(number_block-1)//3
@@ -211,6 +206,10 @@ def go():
                     Playfield[N_out_1][N_out_2][N_1][N_2]=boool[0]
                     boool[0]= 1-boool[0]
                     moves[-1].append([value])
+                    for i in range(3):
+                        for j in range(3):
+                            if is_full(Playfield[i][j]) and ( 1 - Is_win(Playfield[i][j]) ):
+                                restart(Playfield[i][j])
                     if type(Playfield[N_1][N_2])==list and (1 - ( Is_win(Playfield[N_1][N_2]) )) :
                         if Is_win(Playfield[N_out_1][N_out_2]):
                             big_symbol=where_win(Playfield[N_out_1][N_out_2])
@@ -220,13 +219,6 @@ def go():
                         canvas.create_rectangle( TTT_width*N_2*16/47 , TTT_height*(2-N_1)*16/47 , TTT_width*(N_2*16+15)/47 , TTT_height*((2-N_1)*16+15)/47 , fill='orange')
                         draw_grid()
                         draw_symbols()
-                    #I_m_here=0
-                    #go_to_and_change(number)
-                    #canvas.delete('all')
-                    #go_to_and_change(number)
-                    #draw_grid()
-                    #draw_symbols()
-                    #color_move_place()
                     elif Is_win(Playfield[N_1][N_2]):
                         big_symbol=where_win(Playfield[N_1][N_2])
                         Playfield[N_1][N_2]=big_symbol
@@ -244,6 +236,25 @@ def go():
                         draw_symbols()
         finally:
             if Is_win(Playfield):
+                if war.get():
+                    hit=[0]
+                    for i in range(3):
+                        for j in range(3):
+                            if 1 - ( Playfield[i][j] in [0,1] ) :
+                                hit[0]=hit[0]+1
+                    if boool==blue_symbol:
+                        damage = ( 10 - blue_live[0] ) + hit[0]
+                        life_bar_blue.create_rectangle( 0 , 0 , SCREEN_WIDTH*0.05 , round(SCREEN_HEIGHT*0.1*damage) , fill='white' )
+                    else:
+                        damage = ( 10 - red_live[0] ) + hit[0]
+                        life_bar_red.create_rectangle( 0 , 0 , round(SCREEN_WIDTH*0.05) , round(SCREEN_HEIGHT*0.1*damage) , fill='white' )
+                    for i in range(3):
+                        for j in range(3): 
+                            Playfield[i][j]=[[2,2,2],[2,2,2],[2,2,2]]
+                    canvas.delete('all')
+                    canvas.create_rectangle( TTT_width , TTT_height , 0 , 0 , fill='orange')
+                    draw_grid()
+                    draw_symbols()
                 return "sound and Image of win"
             else:
                 for block in range(9):
@@ -252,7 +263,7 @@ def go():
                     if Is_win(Playfield[Num_1][Num_2]):
                         big_symbol=where_win(Playfield[Num_1][Num_2])
                         Playfield[Num_1][Num_2]=big_symbol
-    
+    #life_bar_blue.create_rectangle( 0 , 0 , SCREEN_WIDTH*0.04 , round(SCREEN_HEIGHT*0.1*5) , fill='white' )
 
 
 
@@ -305,10 +316,7 @@ ruls = ti.Button( main_menu , text = """
 """ , background = "purple" , command = watch_ruls , fg="white")
 ruls.place(  x = round( screen_width * 0.45 ) , y = round( screen_height * 0.6 )  )
 
-war = ti.IntVar()
-war_mod = ti.Checkbutton(main_menu, text = " WAR mod ", variable = war , \
-    onvalue = 1, offvalue = 0, height=5, width = 20)
-war_mod.place( x = screen_width * 0.43 , y = screen_height * 0.2 )
+
 
 
 main_menu.mainloop()
