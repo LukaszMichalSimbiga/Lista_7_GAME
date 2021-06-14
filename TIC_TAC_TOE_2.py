@@ -1,5 +1,4 @@
 import tkinter as ti
-from pygame.locals import *
 import os
 import random
 
