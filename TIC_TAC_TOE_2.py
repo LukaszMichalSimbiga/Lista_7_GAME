@@ -53,7 +53,6 @@ def go():
     WIN=[""]
 
     
-
     def Is_win(frame):
         if type(frame)!=list : return False
         if  ( frame[1][1] in (0,1) ) and (   frame[0][1]==frame[1][1]==frame[2][1] or frame[0][0]==frame[1][1]==frame[2][2] or frame[0][2]==frame[1][1]==frame[2][0] or frame[1][0]==frame[1][1]==frame[1][2]   ):
