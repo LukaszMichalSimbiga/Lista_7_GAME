@@ -17,11 +17,11 @@ In this project I use:
 * Win in block(big) change block(big) in circle if circle win , or in cross if cross win inside of this block(big).
 * Your choose determines the block(big) in which the opponent have to make the next move.
 * If this block(big) is change in symbol. Opponent can make next move everywhere (choose block(big) and next choose field in this block ).
-* If block(big) is full but no one win then block cleans up.
-* If war mod is off the game is over when there is no more moves or if somebody arrange tree of his symbosy in a row.
+* If block(big) is full but no one win in this block(big) then block(big) cleans up.
+* If war mod is off the game is over when there is no more moves or if somebody arrange tree of his symbosy in a row in blocks(bigs).
 * If war mod is on the game is over when there is no more moves or someone's health bar drop to 0.
 * In war mod everyone have 10 lives.
-* If someone win in war mad. Damage to enemy health bar is equal to numbers of blocks not changed to symbols.
+* If someone win in war mad. Damage to enemy health bar is equal to numbers of blocks(big) not changed to symbols.
 ## How to run this game
 1. Clone the template project, replacing my-project with the name of the project you are creating: 
 `https://github.com/262267/my_python_game.git my-project`
