@@ -1,5 +1,4 @@
 import tkinter as ti
-import os
 import random
 
 
@@ -14,7 +13,7 @@ main_menu.geometry( str(screen_width) +'x'+ str(screen_height) +'+'+ str(round(s
 war = ti.IntVar()
 war_mod = ti.Checkbutton(main_menu, text = " WAR mod ", variable = war , \
     onvalue = True , offvalue = False, height=5, width = 20)
-war_mod.place( x = screen_width * 0.43 , y = screen_height * 0.2 )
+war_mod.place( x = screen_width * 0.4 , y = screen_height * 0.55 )
 
 
     
@@ -27,7 +26,9 @@ moves=[]
 my_exit = ti.Button( main_menu , text = """
    To finish click here   
 """ , background = "red" , command = exit )
-my_exit.place(  x = round( screen_width * 0.45 ) , y = round( screen_height * 0.8 )  )
+my_exit.place(  x = round( screen_width * 0.6 ) , y = round( screen_height * 0.4 )  )
+
+
 
 def go():
     """Start new game"""
@@ -49,7 +50,7 @@ def go():
     root.geometry( str(SCREEN_WIDTH) +'x'+ str(SCREEN_HEIGHT) +'+'+ str(round(SCREEN_WIDTH/3)) +'+'+ str(round(SCREEN_HEIGHT/3 )) )
 
 
-    
+    WIN=[""]
 
     
 
@@ -63,7 +64,7 @@ def go():
             return True
         else:
             return False
-    def where_win(frame):
+    def who_win(frame):
         if type(frame)!=list : return False
         if  ( frame[1][1] in (0,1) ) and (   frame[0][1]==frame[1][1]==frame[2][1] or frame[0][0]==frame[1][1]==frame[2][2] or frame[0][2]==frame[1][1]==frame[2][0] or frame[1][0]==frame[1][1]==frame[1][2]   ):
             return frame[1][1]
@@ -211,7 +212,7 @@ def go():
                                 restart(Playfield[i][j])
                     if type(Playfield[N_1][N_2])==list and (1 - ( Is_win(Playfield[N_1][N_2]) )) :
                         if Is_win(Playfield[N_out_1][N_out_2]):
-                            big_symbol=where_win(Playfield[N_out_1][N_out_2])
+                            big_symbol=who_win(Playfield[N_out_1][N_out_2])
                             Playfield[N_out_1][N_out_2]=big_symbol
                         moves.append([value])
                         canvas.delete('all')
@@ -219,7 +220,7 @@ def go():
                         draw_grid()
                         draw_symbols()
                     elif Is_win(Playfield[N_1][N_2]):
-                        big_symbol=where_win(Playfield[N_1][N_2])
+                        big_symbol=who_win(Playfield[N_1][N_2])
                         Playfield[N_1][N_2]=big_symbol
                         canvas.delete('all')
                         canvas.create_rectangle( TTT_width , TTT_height , 0 , 0 , fill='orange')
@@ -227,7 +228,7 @@ def go():
                         draw_symbols()
                     else:
                         if Is_win(Playfield[N_out_1][N_out_2]):
-                            big_symbol=where_win(Playfield[N_out_1][N_out_2])
+                            big_symbol=who_win(Playfield[N_out_1][N_out_2])
                             Playfield[N_out_1][N_out_2]=big_symbol
                         canvas.delete('all')
                         canvas.create_rectangle( TTT_width , TTT_height , 0 , 0 , fill='orange')
@@ -242,10 +243,12 @@ def go():
                             if 1 - ( Playfield[i][j] in [0,1] ) :
                                 hit[0]=hit[0]+1
                     if boool==blue_symbol:
-                        damage = ( 10 - blue_live[0] ) + hit[0]
+                        blue_live[0]=blue_live[0]-hit[0]
+                        damage = 10 - blue_live[0] 
                         life_bar_blue.create_rectangle( 0 , 0 , SCREEN_WIDTH*0.05 , round(SCREEN_HEIGHT*0.1*damage) , fill='white' )
                     else:
-                        damage = ( 10 - red_live[0] ) + hit[0]
+                        red_live[0]=red_live[0]-hit[0]
+                        damage = 10 - red_live[0] 
                         life_bar_red.create_rectangle( 0 , 0 , round(SCREEN_WIDTH*0.05) , round(SCREEN_HEIGHT*0.1*damage) , fill='white' )
                     for i in range(3):
                         for j in range(3): 
@@ -254,14 +257,41 @@ def go():
                     canvas.create_rectangle( TTT_width , TTT_height , 0 , 0 , fill='orange')
                     draw_grid()
                     draw_symbols()
-                return "sound and Image of win"
+                    if blue_live[0]<1:
+                        WIN[0]=WIN[0]+"RED WIN"
+                        close()
+                    if red_live[0]<1:
+                        WIN[0]=WIN[0]+"BLUE WIN"
+                        close()
+                else:
+                    winner = who_win(Playfield)
+                    if winner==0:
+                        win_symbol="O"
+                    else:
+                        win_symbol="X"
+                    WIN[0]=WIN[0]+win_symbol+" WIN"
+                    close()
+                win_s.set(WIN[0])
             else:
+                free=[0]
+                for i in range(3):
+                    for j in range(3):
+                        if 1 - ( Playfield[i][j] in [0,1] ) :
+                            free[0]=free[0]+1
+                if free==[0]:
+                    for i in range(3):
+                        for j in range(3): 
+                            Playfield[i][j]=[[2,2,2],[2,2,2],[2,2,2]]
+                    canvas.delete('all')
+                    canvas.create_rectangle( TTT_width , TTT_height , 0 , 0 , fill='orange')
+                    draw_grid()
                 for block in range(9):
                     Num_1 = block//3
                     Num_2 = block%3
                     if Is_win(Playfield[Num_1][Num_2]):
-                        big_symbol=where_win(Playfield[Num_1][Num_2])
+                        big_symbol=who_win(Playfield[Num_1][Num_2])
                         Playfield[Num_1][Num_2]=big_symbol
+            
     #life_bar_blue.create_rectangle( 0 , 0 , SCREEN_WIDTH*0.04 , round(SCREEN_HEIGHT*0.1*5) , fill='white' )
 
 
@@ -270,51 +300,30 @@ def go():
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     root.mainloop()
 start = ti.Button( main_menu , text = """
       Start new game      
 """ , background = "blue" , command = go , fg="white")
-start.place(  x = round( screen_width * 0.45 ) , y = round( screen_height * 0.05 )  )
+start.place(  x = round( screen_width * 0.25 ) , y = round( screen_height * 0.4 )  )
 
-def watch_authors():
-    pass
-Autorzy = ti.Button( main_menu , text = """
-            Authors            
-""" , background = "green" , command = watch_authors , fg="black")
-Autorzy.place(  x = round( screen_width * 0.45 ) , y = round( screen_height * 0.4 )  )
+#def watch_authors():
+#   pass
+#Autorzy = ti.Button( main_menu , text = """
+#            Authors            
+#""" , background = "green" , command = watch_authors , fg="black")
+#Autorzy.place(  x = round( screen_width * 0.45 ) , y = round( screen_height * 0.4 )  )
 
     
-def watch_ruls():
-    pass
-ruls = ti.Button( main_menu , text = """
-               Rules               
-""" , background = "purple" , command = watch_ruls , fg="white")
-ruls.place(  x = round( screen_width * 0.45 ) , y = round( screen_height * 0.6 )  )
+#def watch_ruls():
+#    pass
+#ruls = ti.Button( main_menu , text = """
+#               Rules               
+#""" , background = "purple" , command = watch_ruls , fg="white")
+#ruls.place(  x = round( screen_width * 0.45 ) , y = round( screen_height * 0.6 )  )
 
+win_s = ti.StringVar()
+WINNER = ti.Label( main_menu , textvariable = win_s , relief = ti.RAISED )
+WINNER.place( x = screen_width * 0.48, y = screen_height * 0.2 )
 
 
 
