@@ -53,6 +53,7 @@ def go():
     WIN=[""]
 
     
+
     def Is_win(frame):
         if type(frame)!=list : return False
         if  ( frame[1][1] in (0,1) ) and (   frame[0][1]==frame[1][1]==frame[2][1] or frame[0][0]==frame[1][1]==frame[2][2] or frame[0][2]==frame[1][1]==frame[2][0] or frame[1][0]==frame[1][1]==frame[1][2]   ):
@@ -257,10 +258,10 @@ def go():
                     draw_grid()
                     draw_symbols()
                     if blue_live[0]<1:
-                        WIN[0]=WIN[0]+"RED WIN"
+                        WIN[0]="RED WIN"
                         close()
                     if red_live[0]<1:
-                        WIN[0]=WIN[0]+"BLUE WIN"
+                        WIN[0]="BLUE WIN"
                         close()
                 else:
                     winner = who_win(Playfield)
@@ -268,7 +269,7 @@ def go():
                         win_symbol="O"
                     else:
                         win_symbol="X"
-                    WIN[0]=WIN[0]+win_symbol+" WIN"
+                    WIN[0]=win_symbol+" WIN"
                     close()
                 win_s.set(WIN[0])
             else:
@@ -296,6 +297,30 @@ def go():
 
 
     root.bind("<Key>", your_choose )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
