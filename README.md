@@ -24,7 +24,7 @@ In this project I use:
 * If someone win in war mad. Damage to enemy health bar is equal to numbers of blocks(big) not changed to symbols.
 ## How to run this game
 1. Clone the template project, replacing my-project with the name of the project you are creating: 
-`https://github.com/262267/my_python_game.git my-project`
+`https://github.com/LukaszMichalSimbiga/Lista_7_GAME.git my-project`
 `cd my-project `
 2. Install the project's development and runtime requirements:
 `pip install -r requirements.txt`
